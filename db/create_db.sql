@@ -31,3 +31,15 @@ CREATE TABLE adresy
 	hostname CHAR(255) not null,
 	ip CHAR(255) not null
 );
+
+CREATE TABLE slownik
+(
+	data DATE not null,
+	godzina TIME not null,
+	polski CHAR(255) not null default '',
+	angielski CHAR(255) not null default '',
+	amerykanski CHAR(255) not null default '',
+	uzycie TEXT not null default '',
+	idiomy TEXT not null default '',
+	primary key pk (polski, angielski, amerykanski)
+);

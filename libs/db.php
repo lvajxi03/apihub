@@ -5,14 +5,13 @@ require_once("settings.php");
 class DB
 {
     static private $connection;
-
+    var $mysqli;
     static function get_instance()
     {
         if (DB::$connection == null)
         {
-            mysql_pconnect(HOSTNAME, USERNAME, PASSWORD);
-            mysql_select_db(DATABASE);
             DB::$connection = new DB();
+            DB::$connection->mysqli = new mysqli(HOSTNAME, USERNAME, PASSWORD, DATABASE);
         }
         return DB::$connection;
     }
@@ -26,19 +25,23 @@ class DB
     function query($query)
     {
         // Assoc query
-        $result = mysql_query($query);
-        $response = array();
-        while ($row = mysql_fetch_assoc($result))
+        $result = $this->mysqli->query($query);
+        if ($result)
         {
-            $response[] = $row;
+            $response = array();
+            while ($row = $result->fetch_assoc())
+            {
+                $response[] = $row;
+            }
+            return $response;
         }
-        return $response;
+        return false;
     }
 
     function query_r($query)
     {
         // Raw query
-        return mysql_query($query);
+        return $this->mysqli->query($query);
     }
 }
 

@@ -52,80 +52,89 @@ $response = new Response();
 if ($token != '')
 {
     $db = DB::get_instance();
-    $query = "SELECT data, token from auth_tokens WHERE token='".$token.'"';
-    $result = mysql_query($query);
-    if (count($result) > 0)
+    $query = "SELECT data, token from auth_tokens WHERE token='".$token."'";
+    $result = $db->query($query);
+    if ($result)
     {
-        if (isset($_GET))
+        if (count($result) > 0)
         {
-            $actions = array();
-            $params = array();
-            // GET first, to check what to handle.
-            if (isset($_GET['url']))
+            if (isset($_GET))
             {
-                $actions = explode( "/", $_GET['url']);
-                unset($_GET['url']);
+                $actions = array();
+                $params = array();
+                // GET first, to check what to handle.
+                if (isset($_GET['url']))
+                {
+                    $actions = explode( "/", $_GET['url']);
+                    unset($_GET['url']);
+                }
+                foreach ($_GET as $key => $value)
+                {
+                    $params[$key] = $value;
+                }
             }
-            foreach ($_GET as $key => $value)
-            {
-                $params[$key] = $value;
-            }
-        }
-        $data = array();
+            $data = array();
 
-        if ($method == METHOD_POST)
-        {
-            // POST first
-            if (isset($HTTP_RAW_POST_DATA))
+            if ($method == METHOD_POST)
             {
-                $data = json_decode($HTTP_RAW_POST_DATA, true);
+                // POST first
+                if (isset($HTTP_RAW_POST_DATA))
+                {
+                    $data = json_decode($HTTP_RAW_POST_DATA, true);
+                    if (!is_array($data))
+                    {
+                        $data = null;
+                    }
+                }
+            }
+
+            if ($method == METHOD_PUT)
+            {
+                $raw_data = file_get_contents("php://input");
+                $data = json_decode($raw_data, true);
                 if (!is_array($data))
                 {
                     $data = null;
                 }
             }
-        }
 
-        if ($method == METHOD_PUT)
-        {
-            $raw_data = file_get_contents("php://input");
-            $data = json_decode($raw_data, true);
-            if (!is_array($data))
+            else if ($method == METHOD_DELETE)
             {
-                $data = null;
+                // No extra processing needed.
             }
-        }
 
-        else if ($method == METHOD_DELETE)
-        {
-            // No extra processing needed.
-        }
-
-        if (count($actions) > 0)
-        {
-            $modname = $actions[0];
-            array_shift($actions);
-            $request = new Request($method, $token, $actions, $params, $data);
-
-            $modfile = "libs/".$modname.".php";
-            if (file_exists($modfile))
+            if (count($actions) > 0)
             {
-                include_once($modfile);
-                $module = new $modname();
-                $response = $module->process($request);
+                $modname = $actions[0];
+                array_shift($actions);
+                $request = new Request($method, $token, $actions, $params, $data);
+
+                $modfile = "libs/".$modname.".php";
+                if (file_exists($modfile))
+                {
+                    include_once($modfile);
+                    $module = new $modname();
+                    $response = $module->process($request);
+                }
+                else
+                {
+                    $response->set_http_code(RESPONSE_NOT_FOUND);
+                    $response->set_error_code(ERROR_NO_SUCH_MODULE);
+                    $response->set_error_message("No such module: ".$modname);
+                }
             }
             else
             {
-                $response->set_http_code(RESPONSE_NOT_FOUND);
-                $response->set_error_code(ERROR_NO_SUCH_MODULE);
-                $response->set_error_message("No such module: ".$modname);
+                $response->set_http_code(RESPONSE_NOT_ACCEPTABLE);
+                $response->set_error_code(ERROR_NOT_ALLOWED);
+                $response->set_error_message("Not allowed.");
             }
         }
         else
         {
-            $response->set_http_code(RESPONSE_NOT_ACCEPTABLE);
-            $response->set_error_code(ERROR_NOT_ALLOWED);
-            $response->set_error_message("Not allowed.");
+            $response->set_http_code(RESPONSE_UNAUTHORIZED);
+            $response->set_error_code(ERROR_NOT_AUTHORIZED);
+            $response->set_error_message("Not authorized.");
         }
     }
     else
