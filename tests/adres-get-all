@@ -1,0 +1,4 @@
+GET http://apihub/adres/all
+Content-Type: application/json
+User-Agent: Whatever you want
+Authorization: Bearer <PUT TOKEN HERE>
