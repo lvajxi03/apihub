@@ -26,6 +26,7 @@ if __name__ == "__main__":
     if not token:
         __usage__("Missing env variable TOKEN")
         sys.exit(1)
+    interface = sys.argv[1]
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     pack = struct.pack('256s', interface.encode('utf_8'))
     addr = fcntl.ioctl(sock.fileno(), 0x8915, pack)[20:24]
