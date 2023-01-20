@@ -1,0 +1,6 @@
+PUT http://apihub/
+Content-Type: application/json
+User-Agent: Whatever you want
+Authorization: Bearer <PUT TOKEN HERE>
+
+{"hostname": "hydrogenium", "ip": "192.168.55.106"}
