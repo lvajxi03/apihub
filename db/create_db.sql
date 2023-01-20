@@ -29,7 +29,8 @@ CREATE TABLE adresy
 	data DATE not null,
 	godzina TIME not null,
 	hostname CHAR(255) not null,
-	ip CHAR(255) not null
+	ip CHAR(255) not null,
+	primary key(hostname)
 );
 
 CREATE TABLE slownik

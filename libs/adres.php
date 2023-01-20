@@ -18,10 +18,15 @@ class adres extends ApiHubModule
                 $ip = $request->data['ip'];
                 $data = date("Y-m-d");
                 $godzina = date("H:i:s");
-                $query = "INSERT INTO adresy (hostname, ip, data, godzina) VALUES ('".$hostname."', '".$ip."', '".$data."', '".$godzina."')";
+                $query = "INSERT INTO adresy (hostname, ip, data, godzina) VALUES ('".$hostname."', '".$ip."', '".$data."', '".$godzina."') ON DUPLICATE KEY UPDATE ip='".$ip."', data='".$data."', godzina='".$godzina."'";
                 $result = $db->query_r($query);
                 if ($result)
                 {
+                    $d = array(
+                        "data" => $data,
+                        "godzina" => $godzina
+                    );
+                    $response->set_data($d);
                     $response->set_http_code(RESPONSE_CREATED);
                     $response->set_error_code(ERROR_OK);
                     $response->set_error_message("Created.");
