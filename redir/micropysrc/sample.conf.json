@@ -1,10 +1,10 @@
 {
-  "proxy_token": "S29uc3RhbnR5bm9wb2xpdGFuY3p5a293aWFuZWN6a2E=",
-  "dest_token": "S29uc3RhbnR5bm9wb2xpdGFuY3p5a2lld2ljem93bmE=",
-  "dest_url": "https://api.iostream.pl",
-  "ssid": "ocelot",
-  "password": "HarpaGan#221",
+  "proxy_token": "<base64d token>",
+  "dest_token": "<base64d token>",
+  "dest_url": "https://your.point.of.interests",
+  "ssid": "<your ssid>",
+  "password": "<wifi pass>",
   "hostname": "rhenium",
-  "proxy_prefix": "192.168.55",
-  "proxy_port": 5050
+  "proxy_prefix": "10.10.10 or 192.168.0 or whatever local network you have",
+  "proxy_port": 5000
 }
