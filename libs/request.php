@@ -5,6 +5,7 @@ define('METHOD_GET', 0);
 define('METHOD_POST', 1);
 define('METHOD_PUT', 2);
 define('METHOD_DELETE', 3);
+define('METHOD_HEAD', 4);
 
 class Request
 {

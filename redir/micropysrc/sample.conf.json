@@ -1,0 +1,10 @@
+{
+  "proxy_token": "<base64d token>",
+  "dest_token": "<base64d token>",
+  "dest_url": "https://your.point.of.interests",
+  "ssid": "<your ssid>",
+  "password": "<wifi pass>",
+  "hostname": "rhenium",
+  "proxy_prefix": "10.10.10 or 192.168.0 or whatever local network you have",
+  "proxy_port": 5000
+}
