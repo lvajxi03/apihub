@@ -11,8 +11,13 @@ app = Flask(__name__)
 try:
     conf = config.get(sys.argv[1])
 except IndexError:
-    print("Usage: python -m redir <config-file-name>")
+    print("Usage: python -m redir <config-file-name> [<env>]")
     sys.exit(codes.ERROR_NO_DATA)
+
+try:
+    env = sys.argv.[2].lower()
+except IndexError:
+    env = "dev"
 
 dbconf = conf['database']
 
@@ -50,4 +55,7 @@ def module(first, second = '', third = '', fourth = '', fifth = ''):
 def root():
     return utils.make_unauthorized()
 
-serve(app, host='0.0.0.0', port=5000)
+if env == "prod":
+    serve(app, host='0.0.0.0', port=5000)
+else:
+    app.run(host='0.0.0.0', port=5000)

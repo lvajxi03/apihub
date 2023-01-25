@@ -4,7 +4,6 @@ import urequests
 import ujson
 
 def find_proxy(base: str, port: int, start: int, end: int, token: str):
-    proxy = None
     for host in range(start, end+1):
         request = "http://%(b)s.%(h)d:%(p)d/features" % {'b': base, 'h': host, 'p': port}
         try:
@@ -15,13 +14,12 @@ def find_proxy(base: str, port: int, start: int, end: int, token: str):
                     data = js['features']
                     if "redir" in data:
                         return "http://%(b)s.%(h)d:5000" % {'b': base, 'h': host}
-                    else:
-                        pass
                 except KeyError:
                     pass
-                except OSError:
-                    pass
+        except OSError:
+            pass
     return None
+
 
 while True:
     try:
@@ -39,7 +37,7 @@ while True:
         station = network.WLAN(network.STA_IF)
         station.active(True)
         station.connect(wifi_ssid, wifi_password)
-        time.sleep(5)
+        time.sleep(30)
         ip_addr = station.ifconfig()[0]
         headers = {"Content-type": "application/json",
                    "Authorization": f"Bearer {proxy_token}",
@@ -49,7 +47,7 @@ while True:
             # IP reporting
             data = {"redir": {"target-host": dest_url,
                               "target-token": dest_token},
-                    "hostname": "rhenium",
+                    "hostname": hostname,
                     "ip": ip_addr}
             request = "%(p)s/adres" % {'p': proxy}
             response = urequests.request("PUT", request, headers=headers, json=data)

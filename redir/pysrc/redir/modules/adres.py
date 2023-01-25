@@ -15,7 +15,7 @@ def process(method:str, db, token: str, actions=None, data=None):
                     now = time.localtime()
                     tdata = time.strftime("%Y-%m-%d", now)
                     tgodzina = time.strftime("%H:%M:%S", now)
-                    query = f"INSERT INTO adres y (data, godzina, hostname, ip) VALUES ('{tdata}', '{tgodzina}', '{hn}', '{ip}')"
+                    query = f"INSERT INTO adresy (data, godzina, hostname, ip) VALUES ('{tdata}', '{tgodzina}', '{hn}', '{ip}')"
                     try:
                         db.query(query)
                         if db.cursor.rowcount > 0:
