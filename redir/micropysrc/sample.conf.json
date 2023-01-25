@@ -1,0 +1,10 @@
+{
+  "proxy_token": "S29uc3RhbnR5bm9wb2xpdGFuY3p5a293aWFuZWN6a2E=",
+  "dest_token": "S29uc3RhbnR5bm9wb2xpdGFuY3p5a2lld2ljem93bmE=",
+  "dest_url": "https://api.iostream.pl",
+  "ssid": "ocelot",
+  "password": "HarpaGan#221",
+  "hostname": "rhenium",
+  "proxy_prefix": "192.168.55",
+  "proxy_port": 5050
+}
